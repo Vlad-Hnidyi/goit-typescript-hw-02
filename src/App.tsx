@@ -12,42 +12,42 @@ import Loader from "./components/Loader/Loader.jsx";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage.jsx";
 import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn.jsx";
 import ImageModal from "./components/ImageModal/ImageModal.jsx";
+import { Image, ImgInfo } from "./App.types.js";
 
 // import "./App.css";
 
 function App() {
-  const [images, setImages] = useState([]);
-  const [keyWord, setKeyword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [modalImageInfo, setModalImageInfo] = useState({});
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [images, setImages] = useState<Image[]>([]);
+  const [keyWord, setKeyword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [modalImageInfo, setModalImageInfo] = useState<ImgInfo | null>(null);
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
-  const onOpenModal = (imgInfo) => {
+  const onOpenModal = (imgInfo: ImgInfo): void => {
     setModalImageInfo(imgInfo);
     setModalIsOpen(true);
   };
 
-  function closeModal() {
+  const closeModal = (): void => {
     setModalIsOpen(false);
-  }
+  };
 
-  const onSearch = (userWord) => {
+  const onSearch = (userWord: string): void => {
     setKeyword(userWord);
     setError(false);
     setPage(1);
   };
-
-  const onLoadMore = () => {
+  const onLoadMore = (): void => {
     setPage(page + 1);
   };
 
   useEffect(() => {
     if (!keyWord) return;
 
-    const request = async () => {
+    const request = async (): Promise<void> => {
       try {
         setLoading(true);
         const response = await requestPhotoByKey(keyWord, page);

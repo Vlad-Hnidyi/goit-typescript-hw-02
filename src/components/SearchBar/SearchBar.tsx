@@ -1,17 +1,24 @@
 import toast from "react-hot-toast";
 import { MdImageSearch } from "react-icons/md";
-
+import { FormEvent } from "react";
 import css from "./SearchBar.module.css";
 
-const SearchBar = ({ onSearch }) => {
-  const handleSubmit = (event) => {
+interface SearchBarProps {
+  onSearch: (userWord: string) => void;
+}
+
+const SearchBar = ({ onSearch }: SearchBarProps) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    const userWord = event.target.elements.search.value.trim();
+    const form = event.target as HTMLFormElement;
+    const userWord = (
+      form.elements.namedItem("search") as HTMLInputElement
+    ).value.trim();
+
     if (!userWord) {
       toast.error("Enter text before search", { position: "top-right" });
       return;
     }
-
     onSearch(userWord);
   };
   return (
